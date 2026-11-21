@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ng-news — Concept 03: Stream</title>
+<style>
+  :root {
+    --bg: #fbfbf9;
+    --text: #1c1c1a;
+    --text-dim: #6b6a64;
+    --text-faint: #9c9b93;
+    --line: #e5e4de;
+    --accent: #e0301e;
+    --chip-bg: #f0efea;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
+
+  header {
+    position: sticky; top: 0; z-index: 5;
+    background: rgba(251,251,249,.9); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  header .inner {
+    max-width: 680px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .brand { font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+  .brand .ng { color: var(--accent); }
+  .brand .count { font-family: var(--mono); font-size: 11px; color: var(--text-faint); margin-left: 6px; font-weight: 400; }
+  .filters { display: flex; gap: 6px; margin-left: auto; }
+  .fbtn {
+    font-size: 12.5px; color: var(--text-dim); background: transparent;
+    border: 1px solid var(--line); border-radius: 7px; padding: 4px 11px; cursor: pointer;
+  }
+  .fbtn.active { color: var(--text); border-color: var(--text); }
+  .iconbtn {
+    width: 30px; height: 30px; display: grid; place-items: center;
+    border: 1px solid var(--line); border-radius: 7px; background: transparent;
+    cursor: pointer; color: var(--text-dim); font-size: 14px;
+  }
+
+  .feedmeta {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 16px 0 12px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .feedmeta .now { color: var(--accent); display: flex; align-items: center; gap: 6px; }
+  .feedmeta .now::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .feedmeta .r { margin-left: auto; }
+
+  /* Issue items */
+  article.item { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .item .top {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  }
+  .item .no { color: var(--accent); font-weight: 700; }
+  .item .tag {
+    background: var(--chip-bg); border-radius: 4px; padding: 1px 7px;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em;
+    font-family: var(--mono);
+  }
+  .item h2 { font-size: 17.5px; line-height: 1.35; font-weight: 600; letter-spacing: -.01em; margin-bottom: 5px; }
+  .item h2 .arr { color: var(--text-faint); font-weight: 400; }
+  .item .topics { font-size: 13px; color: var(--text-dim); max-width: 60ch; }
+  .item .bottom {
+    margin-top: 9px; display: flex; align-items: center; gap: 14px;
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  }
+
+  .group {
+    padding: 22px 0 4px; display: flex; align-items: center;
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--text-faint);
+  }
+  .group .ln { flex: 1; border-top: 1px solid var(--line); margin: 0 10px; transform: translateY(-4px); }
+
+  .readerbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #16161a; color: #f2f1ec;
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 20px; font-size: 12.5px;
+  }
+  .readerbar .q { font-family: var(--mono); font-size: 11px; opacity: .55; }
+  .readerbar .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .readerbar .nav { margin-left: auto; display: flex; gap: 6px; }
+  .readerbar .nav button {
+    background: transparent; border: 1px solid #3a3a42; color: #f2f1ec;
+    border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 12px;
+  }
+
+  @media (max-width: 520px) { .filters { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <a class="brand" href="index.html"><span class="ng">ng</span>-news<span class="count">10 issues</span></a>
+    <div class="filters">
+      <button class="fbtn active">All</button>
+      <button class="fbtn">Releases</button>
+      <button class="fbtn">Signals</button>
+      <button class="fbtn">Tooling</button>
+      <button class="fbtn">AI</button>
+    </div>
+    <button class="iconbtn" title="Search">⌕</button>
+    <button class="iconbtn" title="Feed">≡</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="feedmeta">
+    <span class="now">Weekly</span>
+    <span>latest: 26/21 · Oct 3</span>
+    <span class="r">The Angular ecosystem, curated</span>
+  </div>
+
+  <div class="group"><span>2026</span><span class="ln"></span><span>10 issues</span></div>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/21</span><span>·</span><span class="tag">Releases</span><span class="tag">Router</span><span class="tag">Templates</span></div>
+    <h2>Angular 22.2 — Router Resources, Error Boundaries, and Private Template Members <span class="arr">→</span></h2>
+    <div class="topics">Router Resources · Error Boundaries · Private Template Members</div>
+    <div class="bottom"><span>Oct 3, 2026</span><span>·</span><span>3 topics</span><span>·</span><span>8 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/19</span><span>·</span><span class="tag">Releases</span><span class="tag">Signals</span></div>
+    <h2>Angular 22.1 <span class="arr">→</span></h2>
+    <div class="topics">The 22.1 release tour · linkedSignal improvements</div>
+    <div class="bottom"><span>Aug 22, 2026</span><span>·</span><span>2 topics</span><span>·</span><span>6 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/18</span><span>·</span><span class="tag">Releases</span><span class="tag">AI</span></div>
+    <h2>Angular Annual Releases, CopilotKit Integration <span class="arr">→</span></h2>
+    <div class="topics">The new annual release cadence · CopilotKit for Angular</div>
+    <div class="bottom"><span>Aug 6, 2026</span><span>·</span><span>2 topics</span><span>·</span><span>7 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/17</span><span>·</span><span class="tag">Libraries</span><span class="tag">AI</span></div>
+    <h2>PrimeNG's New Licensing, and A2UI for Angular <span class="arr">→</span></h2>
+    <div class="topics">PrimeNG license change, decoded · A2UI arrives for Angular</div>
+    <div class="bottom"><span>Jul 13, 2026</span><span>·</span><span>2 topics</span><span>·</span><span>6 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/16</span><span>·</span><span class="tag">Community</span><span class="tag">Libraries</span><span class="tag">Tooling</span></div>
+    <h2>OpenNG Foundation, spartan/ui, AnalogJS in Storybook <span class="arr">→</span></h2>
+    <div class="topics">OpenNG Foundation launches · spartan/ui progress · AnalogJS + Storybook</div>
+    <div class="bottom"><span>Jul 2, 2026</span><span>·</span><span>3 topics</span><span>·</span><span>7 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/15</span><span>·</span><span class="tag">Releases</span></div>
+    <h2>Angular 22 <span class="arr">→</span></h2>
+    <div class="topics">The Angular 22 feature tour</div>
+    <div class="bottom"><span>Jun 23, 2026</span><span>·</span><span>1 topic</span><span>·</span><span>9 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/14</span><span>·</span><span class="tag">Signals</span><span class="tag">Releases</span></div>
+    <h2>linkedSignal Write-Back, Error Boundaries <span class="arr">→</span></h2>
+    <div class="topics">linkedSignal write-back · error boundaries deep dive</div>
+    <div class="bottom"><span>Jun 2, 2026</span><span>·</span><span>2 topics</span><span>·</span><span>6 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/13</span><span>·</span><span class="tag">Releases</span><span class="tag">Ecosystem</span></div>
+    <h2>@Service, Native Federation, Angular Feature Lifecycles <span class="arr">→</span></h2>
+    <div class="topics">@Service decorator · Native Federation · feature lifecycles</div>
+    <div class="bottom"><span>May 5, 2026</span><span>·</span><span>3 topics</span><span>·</span><span>8 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/12</span><span>·</span><span class="tag">RFCs</span><span class="tag">AI</span><span class="tag">Testing</span></div>
+    <h2>Future of Selectorless, Skills vs. MCP, Zoneless Testing <span class="arr">→</span></h2>
+    <div class="topics">Selectorless RFCs · Skills vs. MCP · zoneless testing patterns</div>
+    <div class="bottom"><span>Apr 10, 2026</span><span>·</span><span>3 topics</span><span>·</span><span>8 min</span></div>
+  </a>
+
+  <a class="item" href="issue.html">
+    <div class="top"><span class="no">26/11</span><span>·</span><span class="tag">Ecosystem</span><span class="tag">Signals</span><span class="tag">Releases</span></div>
+    <h2>TypeScript 6, NgRx RFCs delegatedSignal, Resource Extensions <span class="arr">→</span></h2>
+    <div class="topics">TypeScript 6 lands · NgRx delegatedSignal RFC · resource extensions</div>
+    <div class="bottom"><span>Apr 3, 2026</span><span>·</span><span>3 topics</span><span>·</span><span>7 min</span></div>
+  </a>
+</div>
+
+<div class="readerbar">
+  <span class="q">1 / 10</span>
+  <span class="title">26/21 — Angular 22.2</span>
+  <div class="nav">
+    <button>← Older</button>
+    <button>Newer →</button>
+  </div>
+</div>
+</body>
+</html>

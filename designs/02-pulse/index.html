@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ng-news — Concept 02: Pulse</title>
+<style>
+  :root {
+    /* Brand system from the ng-news YouTube channel:
+       avatar = white + crimson #f60c55 mark; covers = near-black #0a0a0a
+       with minimal white line art. Design tokens mirror that. */
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1a1a1a;
+    --text: #f2f2f2;
+    --text-dim: #a3a3a3;
+    --text-faint: #6b6b6b;
+    --line: #262626;
+    --accent: #f60c55;        /* brand crimson, from channel avatar */
+    --accent-soft: rgba(246,12,85,.14);
+    --chip: #1f1f1f;
+    --radius: 16px;
+    --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(14,17,22,.85); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .inner {
+    max-width: 1240px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .logo { font-weight: 800; font-size: 19px; letter-spacing: -.02em; display: flex; align-items: center; gap: 2px; }
+  .logo .ng { color: var(--accent); }
+  .logo .est { font-weight: 500; color: var(--text-faint); font-size: 12px; margin-left: 10px; letter-spacing: .02em; }
+  .topbar nav { display: flex; gap: 18px; font-size: 13.5px; color: var(--text-dim); }
+  .topbar nav a:hover { color: var(--text); }
+  .topbar .cta {
+    margin-left: auto; background: var(--accent); color: #fff;
+    font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; border: 0; cursor: pointer;
+  }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 24px; }
+
+  /* Tag chips */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .chip {
+    font-size: 13px; color: var(--text-dim); background: var(--chip);
+    border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover { color: var(--text); border-color: #38445a; }
+  .chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+  .chip .n { color: var(--text-faint); font-size: 11.5px; margin-left: 4px; }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(6, 1fr); grid-auto-rows: minmax(110px, auto); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .card:hover { transform: translateY(-2px); border-color: #38445a; }
+  .card .tag {
+    align-self: flex-start; font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+    background: var(--accent-soft); border-radius: 6px; padding: 3px 9px;
+  }
+  .card h3 { font-size: 17px; line-height: 1.3; letter-spacing: -.01em; }
+  .card p { font-size: 13.5px; color: var(--text-dim); }
+  .card .meta { margin-top: auto; font-size: 11.5px; color: var(--text-faint); }
+
+  /* Hero: latest issue */
+  .hero-card {
+    grid-column: span 4; grid-row: span 2; position: relative; overflow: hidden;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(246,12,85,.12) 0%, transparent 55%),
+      var(--surface);
+    justify-content: flex-end; padding-bottom: 24px;
+  }
+  .hero-card .kicker { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .hero-card h2 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.15; letter-spacing: -.02em; }
+  .hero-card p { font-size: 15px; max-width: 58ch; color: var(--text-dim); }
+  /* Hero art mirrors the video-cover template: flat black, corner dots,
+     one large typographic mark (the issue number) instead of imagery. */
+  .hero-card .visual {
+    position: absolute; inset: 0 0 auto 0; height: 52%;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-card .visual .no {
+    font-family: var(--mono); font-size: clamp(56px, 9vw, 110px); font-weight: 700;
+    letter-spacing: -.04em; color: #1f1f1f;
+  }
+  .hero-card .visual .no b { color: var(--accent); font-weight: 700; }
+  .hero-card .visual .dots { position: absolute; width: 14px; height: 14px; opacity: .5; }
+  .hero-card .visual .dots::before, .hero-card .visual .dots::after {
+    content: ""; position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #4a4a4a;
+  }
+  .hero-card .visual .dots::after { transform: translate(8px, 8px); }
+  .hero-card .visual .dots.tl { top: 18px; left: 20px; }
+  .hero-card .visual .dots.tr { top: 18px; right: 20px; }
+  .hero-card .visual .dots.bl { bottom: 18px; left: 20px; }
+  .hero-card .actions { display: flex; gap: 10px; margin-top: 4px; }
+  .hero-card .b1 { background: var(--accent); color: #fff; border: 0; border-radius: 9px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .hero-card .b2 { background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 9px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+
+  /* Inside this issue (topics) */
+  .topics-card {
+    grid-column: span 2; grid-row: span 2;
+    background: var(--surface-2);
+  }
+  .topics-card h4 { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+  .tp { display: flex; gap: 10px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .tp:last-of-type { border-bottom: 0; }
+  .tp .no { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .tp .t { font-size: 13.5px; line-height: 1.35; }
+
+  /* Recent issues rail */
+  .rail {
+    grid-column: span 2; grid-row: span 2;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .rail h4 { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+  .ri { display: flex; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .ri:last-child { border-bottom: 0; }
+  .ri .no { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .ri .t { font-size: 13px; line-height: 1.35; color: var(--text-dim); }
+  .ri:hover .t { color: var(--text); }
+  .ri .d { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
+
+  /* Wide topic cards */
+  .wide { grid-column: span 2; }
+
+  /* Stats: issue count / cadence */
+  .numbers { grid-column: span 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; }
+  .stat .v { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .stat .l { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); margin-top: 2px; }
+
+  /* Video / subscribe */
+  .video {
+    grid-column: span 2; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .video h4 { font-size: 13.5px; font-weight: 700; }
+  .video p { font-size: 12.5px; color: var(--text-dim); }
+  .video .yt {
+    margin-top: auto; display: flex; align-items: center; gap: 8px;
+    color: var(--accent); font-size: 13px; font-weight: 600;
+  }
+  .sub {
+    grid-column: span 2; background: var(--accent); border: 0; border-radius: var(--radius);
+    padding: 20px; color: #fff; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .sub h4 { font-size: 16px; font-weight: 700; }
+  .sub p { font-size: 12.5px; opacity: .85; }
+  .sub button {
+    margin-left: auto; background: #fff; color: var(--accent); border: 0; border-radius: 9px;
+    padding: 9px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  }
+
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-card, .topics-card, .rail, .wide, .video, .sub { grid-column: span 2; grid-row: auto; }
+    .numbers { grid-column: span 2; }
+    .topbar nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+    .hero-card, .topics-card, .rail, .wide, .video, .sub, .numbers { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="inner">
+    <div class="logo"><span class="ng">ng</span>-news<span class="est">the Angular community in 100 seconds — every week</span></div>
+    <nav>
+      <a href="#">Latest</a><a href="#">Archive</a><a href="#">Topics</a><a href="#">Videos</a><a href="#">About</a>
+    </nav>
+    <button class="cta">Subscribe</button>
+  </div>
+</header>
+
+<main>
+  <div class="chips">
+    <div class="chip active">All issues <span class="n">10</span></div>
+    <div class="chip">Releases <span class="n">6</span></div>
+    <div class="chip">Signals <span class="n">3</span></div>
+    <div class="chip">RFCs <span class="n">1</span></div>
+    <div class="chip">Tooling <span class="n">2</span></div>
+    <div class="chip">Libraries <span class="n">3</span></div>
+    <div class="chip">Community <span class="n">1</span></div>
+    <div class="chip">AI <span class="n">3</span></div>
+  </div>
+
+  <div class="grid">
+    <!-- Latest issue hero -->
+    <a class="card hero-card" href="issue.html">
+      <div class="visual">
+        <span class="dots tl"></span><span class="dots tr"></span><span class="dots bl"></span>
+        <div class="no">26/<b>21</b></div>
+      </div>
+      <div class="kicker">Latest issue · Oct 3 2026</div>
+      <h2>Angular 22.2 — Router Resources, Error Boundaries, and Private Template Members</h2>
+      <p>A steady maintenance release with three features that quietly change how you structure apps.</p>
+      <div class="actions">
+        <button class="b1">Read the issue</button>
+        <button class="b2">8 min read</button>
+      </div>
+    </a>
+
+    <!-- Inside this issue -->
+    <aside class="card topics-card">
+      <h4>Inside 26/21</h4>
+      <div class="tp"><span class="no">01</span><span class="t">Router Resources: data loading gets a first-class shape</span></div>
+      <div class="tp"><span class="no">02</span><span class="t">Error Boundaries: finally, a catch-all for template errors</span></div>
+      <div class="tp"><span class="no">03</span><span class="t">Private Template Members: encapsulation for the template</span></div>
+      <div class="meta" style="margin-top:10px">3 topics · Releases</div>
+    </aside>
+
+    <!-- Recent issues -->
+    <aside class="rail">
+      <h4>Recent issues</h4>
+      <a class="ri" href="issue.html"><span class="no">26/19</span><span class="t">Angular 22.1</span><span class="d">Aug 22</span></a>
+      <a class="ri" href="#"><span class="no">26/18</span><span class="t">Annual Releases, CopilotKit</span><span class="d">Aug 6</span></a>
+      <a class="ri" href="#"><span class="no">26/17</span><span class="t">PrimeNG Licensing, A2UI</span><span class="d">Jul 13</span></a>
+      <a class="ri" href="#"><span class="no">26/16</span><span class="t">OpenNG, spartan/ui, AnalogJS</span><span class="d">Jul 2</span></a>
+      <a class="ri" href="#"><span class="no">26/15</span><span class="t">Angular 22</span><span class="d">Jun 23</span></a>
+      <a class="ri" href="#"><span class="no">26/14</span><span class="t">linkedSignal Write-Back</span><span class="d">Jun 2</span></a>
+    </aside>
+
+    <!-- Topic cards from recent issues -->
+    <a class="card wide" href="#">
+      <span class="tag">Releases</span>
+      <h3>Angular 22.1 — what changed under the hood</h3>
+      <p>Issue 26/19: the release tour, with linkedSignal improvements front and centre.</p>
+      <div class="meta">26/19 · Aug 22, 2026</div>
+    </a>
+
+    <a class="card wide" href="#">
+      <span class="tag">AI</span>
+      <h3>CopilotKit lands for Angular</h3>
+      <p>Issue 26/18: agent integration in the framework's own release plan.</p>
+      <div class="meta">26/18 · Aug 6, 2026</div>
+    </a>
+
+    <a class="card wide" href="#">
+      <span class="tag">Libraries</span>
+      <h3>PrimeNG's licensing change, decoded</h3>
+      <p>Issue 26/17: what the new license means for commercial apps, and A2UI's arrival.</p>
+      <div class="meta">26/17 · Jul 13, 2026</div>
+    </a>
+
+    <!-- Stats -->
+    <div class="numbers">
+      <div class="stat"><div class="v">10</div><div class="l">Issues</div></div>
+      <div class="stat"><div class="v">~wk</div><div class="l">Cadence</div></div>
+      <div class="stat"><div class="v">25+</div><div class="l">Topics covered</div></div>
+    </div>
+
+    <!-- Video + subscribe -->
+    <a class="video" href="#">
+      <h4>▶ 100-Second Briefings</h4>
+      <p>Every issue as a ~100-second video on the YouTube channel — 4.6K subscribers and counting.</p>
+      <div class="yt">Watch the latest →</div>
+    </a>
+
+    <div class="sub">
+      <div>
+        <h4>Get every issue, every week</h4>
+        <p>Curated, explained, no noise.</p>
+      </div>
+      <button>Subscribe</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

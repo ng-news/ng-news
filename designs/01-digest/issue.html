@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>26/21: Angular 22.2 — ng-news</title>
+<style>
+  :root {
+    --paper: #faf9f6;
+    --paper-2: #f1efe9;
+    --ink: #1a1a17;
+    --ink-soft: #55534b;
+    --ink-faint: #8b897f;
+    --line: #e2dfd5;
+    --accent: #e0301e;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  header { border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--paper); z-index: 5; }
+  .mast { display: flex; align-items: baseline; gap: 18px; padding: 18px 0; }
+  .wordmark { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+  .wordmark .ng { color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 20px; font-size: 13.5px; color: var(--ink-soft); }
+  .sub-btn { background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px; margin-left: 20px; }
+
+  .crumb { padding: 14px 0 0; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); }
+  .crumb a { color: var(--ink-soft); }
+
+  .issue-head { padding: 26px 0 24px; border-bottom: 2px solid var(--ink); }
+  .issue-head .meta { font-family: var(--mono); font-size: 12.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+  .issue-head h1 { font-family: var(--serif); font-size: clamp(28px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.015em; margin-bottom: 12px; }
+  .issue-head .lede { font-size: 16px; color: var(--ink-soft); max-width: 62ch; }
+  .issue-head .tags { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--line);
+    border-radius: 5px; padding: 3px 9px;
+  }
+
+  /* TOC */
+  .toc {
+    position: sticky; top: 61px; background: var(--paper); z-index: 4;
+    border-bottom: 1px solid var(--line);
+  }
+  .toc .inner {
+    display: flex; gap: 22px; padding: 10px 24px; max-width: 860px; margin: 0 auto;
+    font-size: 13px; color: var(--ink-soft); overflow-x: auto;
+  }
+  .toc a { white-space: nowrap; display: flex; gap: 8px; align-items: baseline; }
+  .toc a .n { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .toc a:hover { color: var(--accent); }
+
+  /* Topics */
+  .topic { padding: 38px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 110px; }
+  .topic .no { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 600; }
+  .topic h2 { font-family: var(--serif); font-size: 26px; line-height: 1.2; letter-spacing: -.01em; margin: 6px 0 12px; }
+  .topic p { color: var(--ink-soft); max-width: 66ch; margin-bottom: 12px; }
+  .topic .note {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-faint);
+    background: var(--paper-2); border: 1px dashed var(--line); border-radius: 6px;
+    padding: 8px 12px; display: inline-block; margin-top: 4px;
+  }
+  code {
+    font-family: var(--mono); font-size: 13px; background: var(--paper-2);
+    border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px;
+  }
+
+  /* Prev / next */
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 30px 0; }
+  .pg { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: var(--paper); }
+  .pg:hover { border-color: var(--ink-faint); }
+  .pg .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+  .pg .t { font-family: var(--serif); font-size: 17px; font-weight: 600; margin-top: 6px; line-height: 1.3; }
+  .pg.next { text-align: right; }
+
+  .share { display: flex; gap: 10px; align-items: center; padding: 0 0 30px; font-size: 13px; color: var(--ink-soft); }
+  .share button {
+    font-size: 12.5px; border: 1px solid var(--line); background: var(--paper);
+    border-radius: 7px; padding: 6px 13px; cursor: pointer; color: var(--ink);
+  }
+
+  footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-size: 12.5px; color: var(--ink-faint); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  footer .mono { font-family: var(--mono); font-size: 11.5px; }
+
+  @media (max-width: 640px) {
+    nav { display: none; }
+    .pager { grid-template-columns: 1fr; }
+    .pg.next { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap mast">
+    <a class="wordmark" href="index.html"><span class="ng">ng</span>·news</a>
+    <nav><a href="#">Latest</a><a href="#">Archive</a><a href="#">Topics</a><a href="#">About</a></nav>
+    <a class="sub-btn" href="#">Subscribe</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="crumb"><a href="index.html">Archive</a> / 2026 / 26/21</div>
+
+  <section class="issue-head">
+    <div class="meta">Issue 26/21 · October 3, 2026 · 8 min read</div>
+    <h1>Angular 22.2 — Router Resources, Error Boundaries, and Private Template Members</h1>
+    <p class="lede">A steady maintenance release with three features that quietly change how you structure apps. We break down what shipped, what it means for existing codebases, and what to watch in the RFC pipeline.</p>
+    <div class="tags">
+      <span class="tag">Releases</span><span class="tag">Router</span><span class="tag">Templates</span>
+    </div>
+  </section>
+
+  <div class="toc">
+    <div class="inner">
+      <a href="#t1"><span class="n">01</span> Router Resources</a>
+      <a href="#t2"><span class="n">02</span> Error Boundaries</a>
+      <a href="#t3"><span class="n">03</span> Private Template Members</a>
+    </div>
+  </div>
+
+  <article class="topic" id="t1">
+    <span class="no">01</span>
+    <h2>Router Resources: data loading gets a first-class shape</h2>
+    <p>The 22.2 release lands the resource-based router API that has been brewing through the RFC process since early 2026. Loaders and resolvers collapse into a single declarative unit that composes with signals, and the old callback styles get deprecated in the same train.</p>
+    <p>In practice, a route definition now carries a <code>resource</code> entry that owns its own cache policy and refresh behaviour — no more parallel <code>loadChildren</code> gymnastics for shared lookups.</p>
+    <span class="note">placeholder body — in production, full text is synced from the Medium issue at publish time</span>
+  </article>
+
+  <article class="topic" id="t2">
+    <span class="no">02</span>
+    <h2>Error Boundaries: finally, a catch-all for template errors</h2>
+    <p>Error boundaries arrive as a template-level construct: wrap a subtree, declare a fallback, and template-time errors stop taking the whole view with them. The RFC thread made two things explicit — lifecycle hooks of the failing component still run, and boundary errors never cross lazy-route module boundaries.</p>
+    <span class="note">placeholder body — synced from Medium at publish time</span>
+  </article>
+
+  <article class="topic" id="t3">
+    <span class="no">03</span>
+    <h2>Private Template Members: encapsulation for the template</h2>
+    <p>The third feature is smaller but cuts deep: template members can now be marked private, keeping them out of the component's public API surface. Library authors get the encapsulation guarantees they've been faking with naming conventions since Angular 2.</p>
+    <p>The trade-off flagged in the RFC thread: private members are still part of the compiled template contract, so cross-boundary template composition patterns need a rework — the migration guide in the issue walks through the three affected patterns.</p>
+    <span class="note">placeholder body — synced from Medium at publish time</span>
+  </article>
+
+  <nav class="pager">
+    <a class="pg" href="#">
+      <div class="lbl">← Previous</div>
+      <div class="t">26/19 — Angular 22.1</div>
+    </a>
+    <a class="pg next" href="#">
+      <div class="lbl">Latest →</div>
+      <div class="t">You're reading the latest issue</div>
+    </a>
+  </nav>
+
+  <div class="share">
+    Share this issue:
+    <button>Copy link</button><button>X</button><button>LinkedIn</button><button>RSS</button>
+  </div>
+</main>
+
+<footer class="wrap">
+  <span><span class="mono">ng</span>·news — weekly Angular ecosystem digest</span>
+  <span class="mono">Concept 01: Digest</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ng-news — Concept 01: Digest</title>
+<style>
+  :root {
+    --paper: #faf9f6;
+    --paper-2: #f1efe9;
+    --ink: #1a1a17;
+    --ink-soft: #55534b;
+    --ink-faint: #8b897f;
+    --line: #e2dfd5;
+    --accent: #e0301e;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* Masthead */
+  header { border-bottom: 1px solid var(--line); background: var(--paper); position: sticky; top: 0; z-index: 5; }
+  .mast {
+    display: flex; align-items: baseline; gap: 18px; padding: 18px 0;
+  }
+  .wordmark { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+  .wordmark .ng { color: var(--accent); }
+  .tagline { font-size: 12.5px; color: var(--ink-faint); }
+  nav { margin-left: auto; display: flex; gap: 20px; font-size: 13.5px; color: var(--ink-soft); }
+  nav a:hover { color: var(--ink); }
+  .sub-btn {
+    background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 600;
+    padding: 8px 16px; border-radius: 8px; margin-left: 20px;
+  }
+  .sub-btn:hover { background: var(--accent); }
+
+  /* Latest issue spread */
+  .latest { padding: 40px 0 36px; border-bottom: 1px solid var(--line); }
+  .issue-head { display: flex; align-items: flex-start; gap: 26px; }
+  .issue-no {
+    font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--accent);
+    background: var(--paper-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 14px; line-height: 1.3; white-space: nowrap;
+  }
+  .issue-no .d { display: block; font-size: 11px; color: var(--ink-faint); font-weight: 400; margin-top: 2px; }
+  .latest h1 { font-family: var(--serif); font-size: clamp(28px, 4.4vw, 40px); line-height: 1.12; letter-spacing: -.015em; margin-bottom: 10px; }
+  .latest .lede { font-size: 16px; color: var(--ink-soft); max-width: 58ch; }
+
+  .topic-index { margin-top: 26px; border-top: 2px solid var(--ink); }
+  .topic {
+    display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: baseline;
+    padding: 15px 0; border-bottom: 1px solid var(--line);
+  }
+  .topic .no { font-family: var(--mono); font-size: 13px; color: var(--ink-faint); }
+  .topic h3 { font-family: var(--serif); font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+  .topic p { font-size: 13.5px; color: var(--ink-soft); margin-top: 3px; max-width: 56ch; }
+  .tag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--line);
+    border-radius: 5px; padding: 2px 8px; white-space: nowrap;
+  }
+  .read-cta {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+    font-size: 14px; font-weight: 600; color: var(--accent);
+  }
+  .read-cta .arr { transition: transform .15s ease; }
+  .read-cta:hover .arr { transform: translateX(4px); }
+
+  /* Archive */
+  .archive { padding: 34px 0 10px; }
+  .archive h2 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 18px; display: flex; align-items: center; gap: 12px;
+  }
+  .archive h2::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+  .arc-item {
+    display: grid; grid-template-columns: 84px 130px 1fr; gap: 16px; align-items: baseline;
+    padding: 13px 0; border-bottom: 1px solid var(--line);
+  }
+  .arc-item:hover .arc-title { color: var(--accent); }
+  .arc-item .no { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 600; }
+  .arc-item .date { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
+  .arc-title { font-size: 15.5px; font-weight: 600; }
+  .arc-item .tags { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* Subscribe band */
+  .band {
+    margin: 40px 0 0; background: var(--ink); color: var(--paper); border-radius: 14px;
+    padding: 30px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .band h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; }
+  .band p { font-size: 13.5px; color: #b8b5aa; margin-top: 4px; }
+  .band .actions { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+  .band .b1 {
+    background: var(--accent); color: #fff; font-size: 13.5px; font-weight: 600;
+    border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer;
+  }
+  .band .b2 {
+    background: transparent; color: var(--paper); font-size: 13.5px; font-weight: 600;
+    border: 1px solid #4a483f; border-radius: 8px; padding: 10px 18px; cursor: pointer;
+  }
+
+  footer {
+    margin-top: 44px; border-top: 1px solid var(--line); padding: 22px 0 40px;
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--ink-faint);
+  }
+  footer .mono { font-family: var(--mono); font-size: 11.5px; }
+
+  @media (max-width: 640px) {
+    nav, .tagline { display: none; }
+    .issue-head { flex-direction: column; gap: 12px; }
+    .arc-item { grid-template-columns: 64px 1fr; }
+    .arc-item .date { display: none; }
+    .band .actions { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap mast">
+    <a class="wordmark" href="index.html"><span class="ng">ng</span>·news</a>
+    <span class="tagline">The Angular ecosystem, curated weekly</span>
+    <nav>
+      <a href="#">Latest</a><a href="#">Archive</a><a href="#">Topics</a><a href="#">About</a>
+    </nav>
+    <a class="sub-btn" href="#">Subscribe</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="latest">
+    <div class="issue-head">
+      <div class="issue-no">26/21<span class="d">Oct 3, 2026</span></div>
+      <div>
+        <h1>Angular 22.2 — Router Resources, Error Boundaries, and Private Template Members</h1>
+        <p class="lede">A steady maintenance release with three features that quietly change how you structure apps. We break down what shipped, what it means for existing codebases, and what to watch in the RFC pipeline.</p>
+      </div>
+    </div>
+
+    <div class="topic-index">
+      <div class="topic">
+        <span class="no">01</span>
+        <div>
+          <h3>Router Resources: data loading gets a first-class shape</h3>
+          <p>The new resource-based router API consolidates loaders and resolvers into one declarative pattern. Migration notes included.</p>
+        </div>
+        <span class="tag">Releases</span>
+      </div>
+      <div class="topic">
+        <span class="no">02</span>
+        <div>
+          <h3>Error Boundaries: finally, a catch-all for template errors</h3>
+          <p>How error boundaries interact with lazy routes and which error types they deliberately do not catch.</p>
+        </div>
+        <span class="tag">Releases</span>
+      </div>
+      <div class="topic">
+        <span class="no">03</span>
+        <div>
+          <h3>Private Template Members: encapsulation for the template</h3>
+          <p>The decorator that keeps template internals out of the public API surface — with the trade-offs the RFC thread revealed.</p>
+        </div>
+        <span class="tag">Releases</span>
+      </div>
+    </div>
+
+    <a class="read-cta" href="issue.html">Read the full issue <span class="arr">→</span></a>
+  </section>
+
+  <section class="archive">
+    <h2>Archive — 10 issues</h2>
+
+    <a class="arc-item" href="issue.html">
+      <span class="no">26/19</span>
+      <span class="date">Aug 22, 2026</span>
+      <div>
+        <div class="arc-title">Angular 22.1</div>
+        <div class="tags"><span class="tag">Releases</span><span class="tag">Signals</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/18</span>
+      <span class="date">Aug 6, 2026</span>
+      <div>
+        <div class="arc-title">Angular Annual Releases, CopilotKit Integration</div>
+        <div class="tags"><span class="tag">Releases</span><span class="tag">AI</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/17</span>
+      <span class="date">Jul 13, 2026</span>
+      <div>
+        <div class="arc-title">PrimeNG's New Licensing, and A2UI for Angular</div>
+        <div class="tags"><span class="tag">Libraries</span><span class="tag">AI</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/16</span>
+      <span class="date">Jul 2, 2026</span>
+      <div>
+        <div class="arc-title">OpenNG Foundation, spartan/ui, AnalogJS in Storybook</div>
+        <div class="tags"><span class="tag">Community</span><span class="tag">Tooling</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/15</span>
+      <span class="date">Jun 23, 2026</span>
+      <div>
+        <div class="arc-title">Angular 22</div>
+        <div class="tags"><span class="tag">Releases</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/14</span>
+      <span class="date">Jun 2, 2026</span>
+      <div>
+        <div class="arc-title">linkedSignal Write-Back, Error Boundaries</div>
+        <div class="tags"><span class="tag">Signals</span><span class="tag">Releases</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/13</span>
+      <span class="date">May 5, 2026</span>
+      <div>
+        <div class="arc-title">@Service, Native Federation, Angular Feature Lifecycles</div>
+        <div class="tags"><span class="tag">Releases</span><span class="tag">Ecosystem</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/12</span>
+      <span class="date">Apr 10, 2026</span>
+      <div>
+        <div class="arc-title">Future of Selectorless, Skills vs. MCP, Zoneless Testing</div>
+        <div class="tags"><span class="tag">RFCs</span><span class="tag">AI</span><span class="tag">Testing</span></div>
+      </div>
+    </a>
+
+    <a class="arc-item" href="#">
+      <span class="no">26/11</span>
+      <span class="date">Apr 3, 2026</span>
+      <div>
+        <div class="arc-title">TypeScript 6, NgRx RFCs delegatedSignal, Resource Extensions</div>
+        <div class="tags"><span class="tag">Ecosystem</span><span class="tag">Signals</span></div>
+      </div>
+    </a>
+  </section>
+
+  <section class="band">
+    <div>
+      <h3>Get every issue, every week</h3>
+      <p>Curated, explained, no noise. Free, straight from the Angular community.</p>
+    </div>
+    <div class="actions">
+      <button class="b1">Subscribe by email</button>
+      <button class="b2">Follow on Medium</button>
+    </div>
+  </section>
+
+  <footer>
+    <span><span class="mono">ng</span>·news — weekly Angular ecosystem digest</span>
+    <span class="mono">Concept 01: Digest · placeholder topic summaries</span>
+  </footer>
+</main>
+</body>
+</html>

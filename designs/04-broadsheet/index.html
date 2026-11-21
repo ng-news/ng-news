@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NG News — Concept 01: Broadsheet</title>
+<style>
+  :root {
+    --paper: #f7f4ee;
+    --ink: #17150f;
+    --ink-soft: #4a463c;
+    --rule: #17150f;
+    --accent: #a3241d;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: "Helvetica Neue", Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--serif); }
+  .sheet { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Masthead */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--sans); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-soft);
+    padding: 12px 0; border-bottom: 3px double var(--rule);
+  }
+  .masthead { text-align: center; padding: 26px 0 18px; border-bottom: 1px solid var(--rule); }
+  .masthead h1 {
+    font-size: clamp(44px, 7vw, 76px); font-weight: 700; letter-spacing: -.02em;
+    font-variant: small-caps;
+  }
+  .masthead .tagline {
+    font-family: var(--sans); font-size: 11px; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--ink-soft); margin-top: 6px;
+  }
+  nav.rubrics {
+    display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;
+    font-family: var(--sans); font-size: 12px; letter-spacing: .12em;
+    text-transform: uppercase; padding: 10px 0; border-bottom: 3px double var(--rule);
+  }
+  nav.rubrics a { color: var(--ink); text-decoration: none; padding-bottom: 2px; border-bottom: 2px solid transparent; }
+  nav.rubrics a:hover, nav.rubrics a.active { border-color: var(--accent); color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 0;
+    border-bottom: 1px solid var(--rule); padding: 22px 0;
+  }
+  .hero .lead { padding-right: 28px; border-right: 1px solid var(--rule); }
+  .kicker {
+    font-family: var(--sans); font-size: 10px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .lead h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.05; letter-spacing: -.01em; margin-bottom: 12px; }
+  .lede { font-size: 17px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 10px; }
+  .byline { font-family: var(--sans); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+
+  .hero .side { padding-left: 28px; }
+  .side-story { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .side-story:first-child { padding-top: 0; }
+  .side-story:last-child { border-bottom: 0; padding-bottom: 0; }
+  .side-story h3 { font-size: 19px; line-height: 1.25; margin: 6px 0; }
+  .side-story p { font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* Columns */
+  .columns {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; padding: 22px 0;
+  }
+  .col { padding: 0 24px; border-right: 1px solid var(--rule); }
+  .col:first-child { padding-left: 0; }
+  .col:last-child { border-right: 0; padding-right: 0; }
+  .col h4 {
+    font-family: var(--sans); font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; border-bottom: 2px solid var(--rule);
+    padding-bottom: 6px; margin-bottom: 14px;
+  }
+  .col h4 span { color: var(--accent); }
+  .item { padding: 12px 0; border-bottom: 1px dotted #9a948a; }
+  .item:first-of-type { padding-top: 0; }
+  .item:last-child { border-bottom: 0; }
+  .item h5 { font-size: 16.5px; line-height: 1.3; margin-bottom: 4px; }
+  .item p { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
+  .item .meta { font-family: var(--sans); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8a8578; margin-top: 5px; }
+
+  .col-2 { grid-column: span 1; }
+
+  /* Op-Ed band */
+  .oped {
+    background: var(--ink); color: var(--paper);
+    padding: 34px 28px; margin: 8px 0 26px;
+    display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center;
+  }
+  .oped .label {
+    font-family: var(--sans); font-size: 10px; letter-spacing: .3em;
+    text-transform: uppercase; color: #d8b46a; writing-mode: vertical-rl;
+    transform: rotate(180deg); border-left: 1px solid #55503f; padding-left: 12px;
+  }
+  .oped h3 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; }
+  .oped p { font-size: 14.5px; line-height: 1.55; color: #c9c4b6; max-width: 60ch; }
+  .oped .byline { color: #8a8578; margin-top: 10px; }
+
+  footer {
+    border-top: 3px double var(--rule); padding: 18px 0 30px;
+    display: flex; justify-content: space-between;
+    font-family: var(--sans); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero .lead { border-right: 0; padding-right: 0; border-bottom: 1px solid var(--rule); padding-bottom: 22px; }
+    .hero .side { padding-left: 0; padding-top: 22px; }
+    .columns { grid-template-columns: 1fr; }
+    .col { border-right: 0; border-bottom: 1px solid var(--rule); padding: 18px 0; }
+    .col:last-child { border-bottom: 0; }
+    .oped { grid-template-columns: 1fr; }
+    .oped .label { writing-mode: horizontal-tb; transform: none; border-left: 0; border-bottom: 1px solid #55503f; padding: 0 0 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="topbar">
+    <span>Vol. I &mdash; No. 1</span>
+    <span>Thursday, 12 June 2025</span>
+    <span>Harbour City Edition</span>
+  </div>
+
+  <header class="masthead">
+    <h1>The Northgate Herald</h1>
+    <div class="tagline">All the news that will print &middot; Since 1893</div>
+  </header>
+
+  <nav class="rubrics">
+    <a class="active" href="#">Front Page</a>
+    <a href="#">World</a>
+    <a href="#">Politics</a>
+    <a href="#">Business</a>
+    <a href="#">Science</a>
+    <a href="#">Culture</a>
+    <a href="#">Sport</a>
+    <a href="#">Opinion</a>
+  </nav>
+
+  <section class="hero">
+    <article class="lead">
+      <div class="kicker">Front Page &middot; Infrastructure</div>
+      <h2>Council Approves Riverfront Transit Line After Decade of Debate</h2>
+      <p class="lede">The eight-kilometre elevated rail corridor will connect the eastern docks to the university district, with first trains scheduled for 2031. Opponents argue the cost &mdash; 2.4 billion &mdash; could instead fund the hospital expansion.</p>
+      <p class="lede">A 6&ndash;4 vote late Wednesday night ended what has been the city&rsquo;s longest-running planning dispute.</p>
+      <div class="byline">By Margaret Ellison &middot; 8 min read</div>
+    </article>
+    <div class="side">
+      <article class="side-story">
+        <div class="kicker">Business</div>
+        <h3>Harbour Docks to Add 400 Cold-Storage Berths</h3>
+        <p>The port authority says the expansion will double refrigerated throughput by next spring.</p>
+      </article>
+      <article class="side-story">
+        <div class="kicker">Weather</div>
+        <h3>First Autumn Front Brings 30&nbsp;mm to the Highlands</h3>
+        <p>Forecasters warn of localized flooding on two valley roads by Friday evening.</p>
+      </article>
+      <article class="side-story">
+        <div class="kicker">City Hall</div>
+        <h3>Budget Office Flags 11% Gap in Roads Programme</h3>
+        <p>Audit letter cites rising material costs and two stalled tenders.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="columns">
+    <div class="col">
+      <h4><span>World</span> &mdash; Briefs</h4>
+      <div class="item">
+        <h5>Meridian Pact Signatories Agree to Tariff Calendar</h5>
+        <p>Negotiators in Astoria tabled a three-year schedule covering steel and agri exports.</p>
+        <div class="meta">Wire &middot; 2 h ago</div>
+      </div>
+      <div class="item">
+        <h5>Drought Reserve Cut to 60% in Southern Basin</h5>
+        <p>Authorities extend watering bans through October as inflows stay below trend.</p>
+        <div class="meta">Wire &middot; 5 h ago</div>
+      </div>
+      <div class="item">
+        <h5>Coalition Talks Collapse in Velden After Vote Walkout</h5>
+        <p>Observers expect elections within the quarter; markets shrugged.</p>
+        <div class="meta">Wire &middot; 9 h ago</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h4><span>Science</span> &mdash; Notebook</h4>
+      <div class="item">
+        <h5>Glacier Survey Finds 12 New Meltwater Lakes</h5>
+        <p>Researchers map rapid formation near the Kessel ridge; outburst risk is low but rising.</p>
+        <div class="meta">Dispatch &middot; 4 h ago</div>
+      </div>
+      <div class="item">
+        <h5>Seed Bank Reopens with 40,000 Accessions</h5>
+        <p>The herbarium&rsquo;s new wing doubles climate-controlled storage for heirloom grain.</p>
+        <div class="meta">Dispatch &middot; 1 d ago</div>
+      </div>
+      <div class="item">
+        <h5>Orbital Debris Watch Adds Three Disintegrating Panels</h5>
+        <p>Tracking stations log fresh fragments at 410&nbsp;km; no conjunction risk this week.</p>
+        <div class="meta">Dispatch &middot; 1 d ago</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h4><span>Culture</span> &mdash; Review</h4>
+      <div class="item">
+        <h5>&ldquo;Saltmarsh&rdquo; Restores the 1974 Stage Cut, Largely Unscathed</h5>
+        <p>The production keeps its original intermission &mdash; and its original doubt. <em>Four stars.</em></p>
+        <div class="meta">By T. Okonkwo &middot; 3 h ago</div>
+      </div>
+      <div class="item">
+        <h5>Print Revival: City&rsquo;s Third Independent Letterpress Opens</h5>
+        <p>Studio on the old cannery street takes commissions from menus to broadsides.</p>
+        <div class="meta">Briefs &middot; 6 h ago</div>
+      </div>
+      <div class="item">
+        <h5>Archive Auction Draws Bids for 1893 Masthead Woodblock</h5>
+        <p>The foundry plate that printed this paper&rsquo;s first issue starts at 12,000.</p>
+        <div class="meta">Briefs &middot; 12 h ago</div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="oped">
+    <div class="label">Opinion</div>
+    <div>
+      <h3>The Transit Vote Was Never About Trains</h3>
+      <p>It was about who gets to define what this city is becoming &mdash; a port, a campus, or a place people choose to stay. The line runs east now; the argument will run longer.</p>
+      <div class="byline">By Daniel Reyes, Columnist</div>
+    </div>
+  </aside>
+
+  <footer>
+    <span>The Northgate Herald</span>
+    <span>Placeholder content &mdash; Concept 01: Broadsheet</span>
+    <span>Printed daily &middot; Est. 1893</span>
+  </footer>
+</div>
+</body>
+</html>
