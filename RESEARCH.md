@@ -46,12 +46,12 @@ Extracted from the channel avatar and ~12 video covers (pixel analysis; referenc
 
 | Element | Finding |
 |---|---|
-| Avatar/logo | **White background + one vivid crimson mark, ≈ `#f60c55`** (consistent cluster rgb 245-247 / 10-18 / 78-102 across samples) |
-| Cover template (standard) | **Near-pure black `#0a0a0a`** (87-92% of frame) with **small white/grey line marks** and **corner dot pairs** — extremely minimal, monochrome + accent |
+| Avatar/logo | **White background + a mark in a diagonal gradient: pink `#fa2aa5` (top-left) → crimson `#f40d57` (core, ~75% of mark pixels) → purple `#a80cb4` (bottom-right)** — direction ≈ 135° |
+| Cover template (standard) | **Near-pure black `#0a0a0a`** (87-92% of frame) with **small white/grey line marks**, **corner dot pairs** and a **small crimson accent** (~1% saturated px, hue cluster #f00050-#f05080) — extremely minimal |
 | Cover variants | Occasional light covers (white bg with purple/orange/red accents) and raw video frames; the black template is the house style |
 | Tone | Fast, punchy, minimal — "100 seconds" format; no gradients, no photography |
 
-**Design implications:** dark theme should be **neutral black** (not blue-tinted); single accent = brand crimson `#f60c55` (not Angular's official red `#DD0031`); hero/issue art should be typographic (issue numbers) + corner-dot motif; video is first-class content. Concept 02 (Pulse) has been re-tokened accordingly.
+**Design implications:** dark theme should be **neutral black** (not blue-tinted); primary accent = the **pink→crimson→purple gradient** (`linear-gradient(135deg, #fa2aa5, #f40d57, #a80cb4)`) for brand-mark moments (logo wordmark, hero issue number, CTA bands), with solid crimson `#f40d57` for small text accents (not Angular's official red `#DD0031`); hero/issue art should be typographic (issue numbers) + corner-dot motif; video is first-class content. Concept 02 (Pulse) has been re-tokened accordingly.
 
 ## 2. Data sources
 

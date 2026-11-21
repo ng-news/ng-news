@@ -13,7 +13,7 @@ The "curated publication" look: warm paper, serif display type, the issue number
 
 ## 02 — Pulse (dark, bento) — **brand-aligned**
 
-Dashboard-style front page: latest issue as a hero card (typographic issue number + corner-dot motif, echoing the video covers), "inside this issue" panel, recent-issues rail, topic cards from older issues, stats, 100-Second Briefings video card, subscribe CTA — all in a bento grid. Tag chips as primary navigation. Re-tokened to the **actual brand system** extracted from the YouTube channel: neutral black `#0a0a0a`, brand crimson `#f60c55`, real channel tagline. Dark-native (would need a light variant). Brand reference images in [`brand/`](brand/).
+Dashboard-style front page: latest issue as a hero card (typographic issue number + corner-dot motif, echoing the video covers), "inside this issue" panel, recent-issues rail, topic cards from older issues, stats, 100-Second Briefings video card, subscribe CTA — all in a bento grid. Tag chips as primary navigation. Re-tokened to the **actual brand system** extracted from the YouTube channel: neutral black `#0a0a0a`, the **pink `#fa2aa5` → crimson `#f40d57` → purple `#a80cb4` gradient** of the channel mark (wordmark, hero issue number, CTA bands), real channel tagline, typographic issue-number hero with corner-dot motif. Dark-native (would need a light variant). Brand reference images in [`brand/`](brand/).
 
 ## 03 — Stream (light, minimal)
 

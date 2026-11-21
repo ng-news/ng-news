@@ -6,9 +6,10 @@
 <title>ng-news — Concept 02: Pulse</title>
 <style>
   :root {
-    /* Brand system from the ng-news YouTube channel:
-       avatar = white + crimson #f60c55 mark; covers = near-black #0a0a0a
-       with minimal white line art. Design tokens mirror that. */
+    /* Brand system from the ng-news YouTube channel (pixel-analyzed avatar):
+       the mark is a DIAGONAL GRADIENT — pink #fa2aa5 (top-left) through
+       crimson #f40d57 (core) to purple #a80cb4 (bottom-right), on white;
+       covers = near-black #0a0a0a, minimal line art + small crimson accents. */
     --bg: #0a0a0a;
     --surface: #141414;
     --surface-2: #1a1a1a;
@@ -16,8 +17,9 @@
     --text-dim: #a3a3a3;
     --text-faint: #6b6b6b;
     --line: #262626;
-    --accent: #f60c55;        /* brand crimson, from channel avatar */
-    --accent-soft: rgba(246,12,85,.14);
+    --accent: #f40d57;        /* brand crimson — core of the gradient mark */
+    --grad: linear-gradient(135deg, #fa2aa5 0%, #f40d57 50%, #a80cb4 100%);
+    --accent-soft: rgba(244,13,87,.14);
     --chip: #1f1f1f;
     --radius: 16px;
     --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -37,12 +39,12 @@
     display: flex; align-items: center; gap: 20px;
   }
   .logo { font-weight: 800; font-size: 19px; letter-spacing: -.02em; display: flex; align-items: center; gap: 2px; }
-  .logo .ng { color: var(--accent); }
+  .logo .ng { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .logo .est { font-weight: 500; color: var(--text-faint); font-size: 12px; margin-left: 10px; letter-spacing: .02em; }
   .topbar nav { display: flex; gap: 18px; font-size: 13.5px; color: var(--text-dim); }
   .topbar nav a:hover { color: var(--text); }
   .topbar .cta {
-    margin-left: auto; background: var(--accent); color: #fff;
+    margin-left: auto; background: var(--grad); color: #fff;
     font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 10px; border: 0; cursor: pointer;
   }
 
@@ -80,7 +82,8 @@
   .hero-card {
     grid-column: span 4; grid-row: span 2; position: relative; overflow: hidden;
     background:
-      radial-gradient(120% 140% at 100% 0%, rgba(246,12,85,.12) 0%, transparent 55%),
+      radial-gradient(120% 140% at 100% 0%, rgba(250,42,165,.10) 0%, transparent 55%),
+      radial-gradient(120% 140% at 0% 100%, rgba(168,12,180,.09) 0%, transparent 55%),
       var(--surface);
     justify-content: flex-end; padding-bottom: 24px;
   }
@@ -97,9 +100,9 @@
   }
   .hero-card .visual .no {
     font-family: var(--mono); font-size: clamp(56px, 9vw, 110px); font-weight: 700;
-    letter-spacing: -.04em; color: #1f1f1f;
+    letter-spacing: -.04em;
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .hero-card .visual .no b { color: var(--accent); font-weight: 700; }
   .hero-card .visual .dots { position: absolute; width: 14px; height: 14px; opacity: .5; }
   .hero-card .visual .dots::before, .hero-card .visual .dots::after {
     content: ""; position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #4a4a4a;
@@ -151,14 +154,14 @@
     grid-column: span 2; background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;
   }
-  .video h4 { font-size: 13.5px; font-weight: 700; }
+  .video h4 { font-size: 13.5px; font-weight: 700; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .video p { font-size: 12.5px; color: var(--text-dim); }
   .video .yt {
     margin-top: auto; display: flex; align-items: center; gap: 8px;
     color: var(--accent); font-size: 13px; font-weight: 600;
   }
   .sub {
-    grid-column: span 2; background: var(--accent); border: 0; border-radius: var(--radius);
+    grid-column: span 2; background: var(--grad); border: 0; border-radius: var(--radius);
     padding: 20px; color: #fff; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   }
   .sub h4 { font-size: 16px; font-weight: 700; }
