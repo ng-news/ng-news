@@ -1,0 +1,11 @@
+{
+  "name": "ng-news-functions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0"
+  }
+}

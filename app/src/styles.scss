@@ -1,0 +1,105 @@
+/* ng-news brand system — extracted from the official YouTube channel:
+   near-black covers (#0a0a0a) with minimal line art, small crimson accents,
+   and the avatar's diagonal gradient mark:
+   pink #fa2aa5 (top-left) -> crimson #f40d57 (core) -> purple #a80cb4 (bottom-right). */
+:root {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-2: #1a1a1a;
+  --text: #f2f2f2;
+  --text-dim: #a3a3a3;
+  --text-faint: #6b6b6b;
+  --line: #262626;
+  --accent: #f40d57;
+  --grad: linear-gradient(135deg, #fa2aa5 0%, #f40d57 50%, #a80cb4 100%);
+  --accent-soft: rgba(244, 13, 87, 0.14);
+  --chip: #1f1f1f;
+  --radius: 16px;
+  --sans: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--chip);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* Rendered issue bodies (from the content pipeline) */
+.article {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-dim);
+
+  h1 {
+    font-size: 26px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin: 40px 0 14px;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-size: 20px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin: 34px 0 10px;
+  }
+
+  h3 {
+    font-size: 16.5px;
+    color: var(--text);
+    margin: 26px 0 8px;
+  }
+
+  p {
+    margin: 0 0 14px;
+    max-width: 72ch;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  ul {
+    margin: 0 0 14px 20px;
+    max-width: 72ch;
+
+    li {
+      margin: 4px 0;
+    }
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 28px 0;
+  }
+}

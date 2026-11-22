@@ -1,0 +1,13 @@
+@let latest = issue();
+@if (latest) {
+  <aside class="card">
+    <a class="head" [routerLink]="['/issues', latest.id.slice(0, 2), latest.id.slice(3)]">Inside {{ latest.id }}</a>
+    @for (topic of latest.topics; track $index; let i = $index) {
+      <a class="tp" [routerLink]="['/issues', latest.id.slice(0, 2), latest.id.slice(3)]" [fragment]="'topic-' + (i + 1)">
+        <span class="no">{{ pad(i + 1) }}</span>
+        <span class="t">{{ topic.title }}</span>
+      </a>
+    }
+    <div class="meta">{{ latest.topics.length }} topics · {{ latest.tags.join(', ') }}</div>
+  </aside>
+}

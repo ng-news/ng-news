@@ -1,0 +1,15 @@
+<tag-filter />
+
+<div class="grid">
+  <hero-card />
+  <inside-issue />
+  <issue-rail />
+
+  @for (item of featured(); track item.issue.id) {
+    <topic-card [issue]="item.issue" [topic]="item.topic" />
+  }
+
+  <stats-card />
+  <video-card />
+  <subscribe-card />
+</div>

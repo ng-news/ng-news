@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  grid-column: span 2;
+}
+
+.video {
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: #38445a;
+  }
+
+  h4 {
+    font-size: 13.5px;
+    font-weight: 700;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  p {
+    font-size: 12.5px;
+    color: var(--text-dim);
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+  }
+
+  .yt {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 960px) {
+  :host {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 560px) {
+  :host {
+    grid-column: span 1;
+  }
+}

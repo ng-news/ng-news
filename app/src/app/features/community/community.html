@@ -1,0 +1,45 @@
+<div class="wrap">
+  <div class="head">
+    <div>
+      <p class="kicker">Community</p>
+      <h1>Community picks</h1>
+      <p class="lede">
+        Tools, libraries and projects from the Angular community that we think you should know
+        about — submitted by you, curated by us, featured in the weekly issue.
+      </p>
+    </div>
+    <a class="cta" routerLink="/submit">Submit your project</a>
+  </div>
+
+  @if (failed()) {
+    <div class="empty">
+      <p>Community picks are coming soon — the submission pipeline is being set up.</p>
+      <a class="b1" routerLink="/submit">Submit your project</a>
+    </div>
+  } @else if (picks() && !picks()!.length) {
+    <div class="empty">
+      <p>No picks yet — be the first. Submit your project and it may land here in the next issue.</p>
+      <a class="b1" routerLink="/submit">Submit your project</a>
+    </div>
+  } @else if (picks()) {
+    <div class="grid">
+      @for (pick of picks()!; track pick.url) {
+        <a class="pick" [href]="pick.url" target="_blank" rel="noopener">
+          <div class="top">
+            <h3>{{ pick.name }}</h3>
+            @if (featured(pick.featuredAt)) {
+              <span class="when">{{ featured(pick.featuredAt) }}</span>
+            }
+          </div>
+          <p>{{ pick.description }}</p>
+          <div class="foot">
+            @if (pick.author) {
+              <span class="by">by {{ pick.author }}</span>
+            }
+            <span class="arrow">Visit ↗</span>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

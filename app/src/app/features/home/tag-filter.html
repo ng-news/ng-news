@@ -1,0 +1,10 @@
+<div class="chips">
+  <button class="chip" [class.active]="selectedTag() === ''" (click)="select('')">
+    All issues <span class="n">{{ totalCount().length }}</span>
+  </button>
+  @for (t of tags(); track t.tag) {
+    <button class="chip" [class.active]="selectedTag() === t.tag" (click)="select(t.tag)">
+      {{ t.tag }} <span class="n">{{ t.count }}</span>
+    </button>
+  }
+</div>

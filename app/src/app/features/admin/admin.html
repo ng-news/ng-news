@@ -1,0 +1,62 @@
+<div class="wrap">
+  <p class="kicker">Moderation</p>
+  <h1>Community submissions</h1>
+
+  @if (!authed()) {
+    <form class="gate" (submit)="$event.preventDefault(); login()">
+      <label>
+        <span>Admin token</span>
+        <input type="password" autocomplete="off" placeholder="ADMIN_TOKEN"
+          [value]="token()" (input)="setToken($any($event.target).value)" (focus)="authError.set(false)" />
+      </label>
+      @if (authError()) {
+        <p class="err">Wrong token — check the ADMIN_TOKEN env var.</p>
+      }
+      <button type="submit" class="b1">Open queue</button>
+    </form>
+  } @else {
+    <div class="bar">
+      <div class="tabs">
+        @for (t of filters; track t) {
+          <button class="tab" [class.active]="filter() === t" (click)="setFilter(t)">{{ t }}</button>
+        }
+      </div>
+      <button class="b2" (click)="logout()">Log out</button>
+    </div>
+
+    @if (!visible().length) {
+      <p class="none">Nothing in “{{ filter() }}”.</p>
+    } @else {
+      <div class="list">
+        @for (s of visible(); track s.id) {
+          <div class="item" [ngClass]="'st-' + s.status">
+            <div class="main">
+              <div class="topline">
+                <a class="name" [href]="s.url" target="_blank" rel="noopener">{{ s.name }} ↗</a>
+                <span class="meta">
+                  @if (s.author) { {{ s.author }} · }
+                  @if (s.email) { <a [href]="'mailto:' + s.email">{{ s.email }}</a> · }
+                  {{ fmt(s.created_at) }}
+                </span>
+              </div>
+              <p class="desc">{{ s.description }}</p>
+            </div>
+            <div class="side">
+              <span class="chip" [ngClass]="'st-' + s.status">{{ s.status }}</span>
+              @if (s.status === 'pending') {
+                <div class="btns">
+                  <button class="ok" [disabled]="busy()" (click)="decide(s, 'approved')">Approve</button>
+                  <button class="no" [disabled]="busy()" (click)="decide(s, 'rejected')">Reject</button>
+                </div>
+              } @else {
+                <button class="undo" [disabled]="busy()" (click)="decide(s, 'pending')">
+                  Reopen
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

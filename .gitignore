@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# generated at build time (pnpm content:build)
+app/src/app/generated/
+app/public/search-index.json
+
+# build artifacts
+preview/
+functions/.vercel/
+
+# env
+.env
+.env.local

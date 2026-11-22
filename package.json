@@ -1,0 +1,14 @@
+{
+  "name": "ng-news",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@12.21.0",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "sync": "node content/sync.mjs",
+    "content:build": "node content/build-content.mjs",
+    "dev": "pnpm --dir app start",
+    "build": "pnpm content:build && pnpm --dir app build",
+    "start": "pnpm --dir app serve:ssr:ng-news-app"
+  }
+}

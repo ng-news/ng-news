@@ -1,0 +1,6 @@
+<a class="card" [routerLink]="['/issues', issue().id.slice(0, 2), issue().id.slice(3)]">
+  <span class="tag">{{ topic().tag }}</span>
+  <h3>{{ topic().title }}</h3>
+  <p>Issue {{ issue().id }}: {{ issue().teaser }}</p>
+  <div class="meta">{{ issue().id }}{{ issue().date ? ' · ' + date(issue().date) + ', 2026' : '' }}</div>
+</a>

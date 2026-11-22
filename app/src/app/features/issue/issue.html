@@ -1,0 +1,118 @@
+@let current = currentIssue();
+@if (current) {
+  <div class="wrap">
+    <div class="crumb"><a routerLink="/">Archive</a> / {{ current.date ? current.date.slice(0, 4) : '2026' }} / {{ current.id }}</div>
+
+    <section class="hero">
+      <div class="kicker">
+        Issue {{ current.id }} · {{ current.date ? longDate(current.date) : '2026' }}
+        @if (current.readMinutes) {
+          · {{ current.readMinutes }} min read
+        }
+      </div>
+      <h1>{{ current.title }}</h1>
+      <p class="lede">{{ current.teaser }}</p>
+      <div class="tags">
+        @for (tag of current.tags; track tag) {
+          <span class="tag">{{ tag }}</span>
+        }
+      </div>
+    </section>
+
+    <div class="layout">
+      <div class="content">
+        @if (current.bodyHtml) {
+          <article class="article" [innerHTML]="current.bodyHtml"></article>
+        } @else {
+          @for (topic of current.topics; track $index; let i = $index) {
+            <article class="topic" [id]="'topic-' + (i + 1)">
+              <span class="no">{{ pad(i + 1) }}</span>
+              <h2>{{ topic.title }}</h2>
+              <p class="placeholder">Full text in the Medium issue — the archive syncs titles and briefings here first.</p>
+              @if (topic.videoUrl) {
+                <a class="video-link" [href]="topic.videoUrl" target="_blank" rel="noopener">▶ 100-second briefing on YouTube</a>
+              }
+            </article>
+          }
+        }
+
+        @if (current.mediumUrl) {
+          <a class="medium-link" [href]="current.mediumUrl" target="_blank" rel="noopener">
+            Read the full issue on Medium →
+          </a>
+        }
+
+        <nav class="pager">
+          @if (previous()) {
+            <a class="pg" [routerLink]="['/issues', previous()!.id.slice(0, 2), previous()!.id.slice(3)]">
+              <div class="lbl">← Previous</div>
+              <div class="t">{{ previous()!.id }} — {{ previous()!.title }}</div>
+            </a>
+          } @else {
+            <span></span>
+          }
+          @if (next()) {
+            <a class="pg next" [routerLink]="['/issues', next()!.id.slice(0, 2), next()!.id.slice(3)]">
+              <div class="lbl">Newer →</div>
+              <div class="t">{{ next()!.id }} — {{ next()!.title }}</div>
+            </a>
+          } @else {
+            <a class="pg next" routerLink="/">
+              <div class="lbl">Home →</div>
+              <div class="t">You're reading the latest issue</div>
+            </a>
+          }
+        </nav>
+
+        <div class="share">
+          Share this issue:
+          <button (click)="copyLink()">{{ copied() ? 'Copied ✓' : 'Copy link' }}</button>
+
+          <button [disabled]="true" title="Coming soon">X</button>
+          <button [disabled]="true" title="Coming soon">LinkedIn</button>
+          <a [href]="'https://medium.com/feed/ng-news'" target="_blank" rel="noopener">RSS</a>
+        </div>
+
+        <section class="comments">
+          <h4>Discussion</h4>
+          @if (giscusEnabled()) {
+            <div id="giscus-comments"></div>
+          } @else {
+            <p class="soon">
+              Comments are coming soon. Until then, discuss this issue on
+              <a [href]="current.mediumUrl ?? site.medium" target="_blank" rel="noopener">Medium</a>
+              or in the
+              <a [href]="current.videoUrl ?? site.youtube" target="_blank" rel="noopener">100-second briefings</a>.
+            </p>
+          }
+        </section>
+      </div>
+
+      <aside class="toc">
+        <h4>In this issue</h4>
+        @for (topic of current.topics; track $index; let i = $index) {
+          @if (!current.bodyHtml) {
+            <a [href]="'#topic-' + (i + 1)"><span class="n">{{ pad(i + 1) }}</span> {{ topic.title }}</a>
+          } @else {
+            <span class="item"><span class="n">{{ pad(i + 1) }}</span> {{ topic.title }}</span>
+          }
+        }
+        <div class="meta">
+          {{ current.topics.length }} topics
+          @if (current.readMinutes) {
+            · ~{{ current.readMinutes }} min
+          }<br>
+          Published {{ current.date ? longDate(current.date) : '2026' }}<br>
+          Also on Medium, YouTube, LinkedIn
+        </div>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <div class="wrap notfound">
+    <p class="kicker">404</p>
+    <h1>Issue not found</h1>
+    <p>We don't have an issue with that number — it may not be published yet.</p>
+    <a class="b1" routerLink="/">Back to the archive</a>
+  </div>
+}

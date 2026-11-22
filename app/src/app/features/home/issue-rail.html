@@ -1,0 +1,12 @@
+<aside class="rail" id="archive">
+  <h4>Archive</h4>
+  @for (issue of issues(); track issue.id) {
+    <a class="ri" [routerLink]="['/issues', issue.id.slice(0, 2), issue.id.slice(3)]">
+      <span class="no">{{ issue.id }}</span>
+      <span class="t">{{ issue.title }}</span>
+      @if (issue.date) {
+        <span class="d">{{ date(issue.date) }}</span>
+      }
+    </a>
+  }
+</aside>

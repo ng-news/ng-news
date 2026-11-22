@@ -1,0 +1,18 @@
+@let latest = issue();
+@if (latest) {
+  <a class="card" [routerLink]="['/issues', latest.id.slice(0, 2), latest.id.slice(3)]">
+    <div class="visual">
+      <span class="dots tl"></span><span class="dots tr"></span><span class="dots bl"></span>
+      <div class="no">{{ latest.id }}</div>
+    </div>
+    <div class="kicker">Latest issue · {{ dateLabel() }}</div>
+    <h2>{{ latest.title }}</h2>
+    <p>{{ latest.teaser }}</p>
+    <div class="actions">
+      <span class="b1">Read the issue</span>
+      @if (latest.readMinutes) {
+        <span class="b2">{{ latest.readMinutes }} min read</span>
+      }
+    </div>
+  </a>
+}

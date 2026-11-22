@@ -1,0 +1,143 @@
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+
+    .kicker {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 34px;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .lede {
+      color: var(--text-dim);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 560px;
+    }
+
+    .cta {
+      background: var(--grad);
+      color: #fff;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.pick {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  transition: border-color 0.15s, transform 0.15s;
+
+  &:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+
+    .arrow {
+      color: var(--text);
+    }
+  }
+
+  .top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+
+    h3 {
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .when {
+      font-size: 11.5px;
+      color: var(--text-faint);
+      white-space: nowrap;
+    }
+  }
+
+  p {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12.5px;
+
+    .by {
+      color: var(--text-faint);
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  }
+}
+
+.empty {
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 48px 24px;
+  text-align: center;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+
+  p {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    max-width: 420px;
+  }
+}
+
+.b1 {
+  background: var(--grad);
+  color: #fff;
+  border-radius: 9px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 700;
+}

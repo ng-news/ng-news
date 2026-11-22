@@ -1,0 +1,325 @@
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.crumb {
+  padding: 16px 0 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+
+  a {
+    color: var(--text-dim);
+
+    &:hover {
+      color: var(--text);
+    }
+  }
+}
+
+/* Issue hero */
+.hero {
+  margin: 14px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(246, 12, 85, 0.12) 0%, transparent 55%),
+    var(--surface);
+  padding: 34px;
+  position: relative;
+  overflow: hidden;
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: clamp(26px, 3.4vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+  }
+
+  .lede {
+    margin-top: 12px;
+    font-size: 15.5px;
+    color: var(--text-dim);
+    max-width: 66ch;
+  }
+
+  .tags {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+.tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+/* Layout: content + TOC rail */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 24px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.toc {
+  position: sticky;
+  top: 80px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+
+  h4 {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  a,
+  .item {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--line);
+  }
+
+  a:last-of-type,
+  .item:last-of-type {
+    border-bottom: 0;
+  }
+
+  .n {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  a:hover {
+    color: var(--text);
+  }
+
+  .meta {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    line-height: 1.6;
+  }
+}
+
+/* Topic blocks (issues synced from Medium, full text lives on Medium) */
+.topic {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px 30px;
+  margin-bottom: 16px;
+  scroll-margin-top: 80px;
+
+  .no {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  h2 {
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 6px 0 12px;
+  }
+
+  .placeholder {
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    max-width: 70ch;
+  }
+
+  .video-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+}
+
+.medium-link {
+  display: inline-block;
+  margin: 8px 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0 30px;
+}
+
+.pg {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+
+  &:hover {
+    border-color: #38445a;
+  }
+
+  .lbl {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .t {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  &.next {
+    text-align: right;
+  }
+}
+
+.share {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-bottom: 40px;
+  font-size: 13px;
+  color: var(--text-dim);
+
+  button,
+  a {
+    font-size: 12.5px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 7px;
+    padding: 6px 13px;
+    cursor: pointer;
+    color: var(--text);
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+  }
+}
+
+.comments {
+  border-top: 1px solid var(--line);
+  padding: 28px 0 8px;
+
+  h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .soon {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.6;
+
+    a {
+      color: var(--text);
+      border-bottom: 1px solid var(--accent);
+    }
+  }
+
+  /* Giscus renders its own UI; keep the wrapper tidy in the dark theme */
+  #giscus-comments {
+    min-height: 60px;
+
+    iframe {
+      border-radius: 12px;
+    }
+  }
+}
+
+.notfound {
+  padding: 80px 0;
+  text-align: center;
+
+  .kicker {
+    font-family: var(--mono);
+    color: var(--accent);
+    letter-spacing: 0.2em;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin: 12px 0;
+  }
+
+  p {
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  .b1 {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 9px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toc {
+    position: static;
+    order: -1;
+  }
+
+  .pager {
+    grid-template-columns: 1fr;
+  }
+
+  .pg.next {
+    text-align: left;
+  }
+}

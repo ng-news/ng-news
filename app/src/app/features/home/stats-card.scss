@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  grid-column: span 2;
+}
+
+.numbers {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+
+  .v {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .l {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 960px) {
+  :host {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 560px) {
+  :host {
+    grid-column: span 1;
+  }
+}

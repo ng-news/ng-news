@@ -1,0 +1,241 @@
+{
+  "site": {
+    "name": "ng-news",
+    "tagline": "The latest updates from the Angular community, within 100 seconds every week.",
+    "medium": "https://medium.com/ng-news",
+    "rss": "https://medium.com/feed/ng-news",
+    "youtube": "https://www.youtube.com/@ng-news",
+    "youtubeChannelId": "UCpNgAFB5-_3WSHD_olBv7nw",
+    "x": "https://x.com/_ng_news",
+    "linkedin": "https://www.linkedin.com/newsletters/ng-news-7095802643150692352"
+  },
+  "latestVideo": {
+    "issue": "26/24",
+    "title": "OpenAPI Generator, slide.ng and Angular Compiler Benchmarks",
+    "url": "https://www.youtube.com/watch?v=evalV3kNoek"
+  },
+  "issues": [
+    {
+      "id": "26/21",
+      "title": "Angular 22.2 — Router Resources, Error Boundaries, and Private Template Members",
+      "date": "2026-10-03",
+      "teaser": "A steady maintenance release with three features that quietly change how you structure apps.",
+      "mediumUrl": "https://medium.com/ng-news/angular-22-2-router-resources-error-boundaries-and-private-template-membe",
+      "readMinutes": 8,
+      "tags": ["Releases", "Router", "Templates"],
+      "topics": [
+        {
+          "title": "Router Resources: data loading gets a first-class shape",
+          "tag": "Router",
+          "videoUrl": "https://www.youtube.com/watch?v=foMzNHjsgAc"
+        },
+        {
+          "title": "Error Boundaries: finally, a catch-all for template errors",
+          "tag": "Framework",
+          "videoUrl": "https://www.youtube.com/watch?v=b3eb1Bh8gQc"
+        },
+        {
+          "title": "Private Template Members: encapsulation for the template",
+          "tag": "Templates",
+          "videoUrl": "https://www.youtube.com/watch?v=3HSS03GsWSE"
+        }
+      ]
+    },
+    {
+      "id": "26/19",
+      "title": "Angular 22.1",
+      "date": "2026-08-22",
+      "teaser": "Angular 22.1 adds a custom set function for linkedSignal. It gives us something like two-way binding between signals while keeping one side the source of truth.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-19-angular-22-1-1f27df8288e9",
+      "tags": ["Releases", "Signals"],
+      "topics": [
+        {
+          "title": "A custom set function for linkedSignal",
+          "tag": "Signals"
+        }
+      ]
+    },
+    {
+      "id": "26/18",
+      "title": "Angular Annual Releases, CopilotKit Integration",
+      "date": "2026-08-06",
+      "teaser": "How the annual Angular release trains work, and what integrating CopilotKit means for agentic UIs in Angular apps.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-18-angular-annual-releases-copilotkit-integration-602f27a344e7",
+      "tags": ["Releases", "AI"],
+      "topics": [
+        {
+          "title": "How Angular's annual release trains work",
+          "tag": "Releases"
+        },
+        {
+          "title": "CopilotKit integration for agentic UIs",
+          "tag": "AI"
+        }
+      ]
+    },
+    {
+      "id": "26/17",
+      "title": "PrimeNG's New Licensing, and A2UI for Angular",
+      "date": "2026-07-13",
+      "teaser": "What PrimeNG's license change means for commercial users, and the first look at A2UI support in Angular.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-17-primengs-new-licensing-and-a2ui-for-angular-7d7f95d31fed",
+      "tags": ["Ecosystem", "AI"],
+      "topics": [
+        {
+          "title": "PrimeNG's new licensing",
+          "tag": "Ecosystem"
+        },
+        {
+          "title": "A2UI for Angular",
+          "tag": "AI"
+        }
+      ]
+    },
+    {
+      "id": "26/16",
+      "title": "OpenNG Foundation, spartan/ui, AnalogJS in Storybook",
+      "date": "2026-07-02",
+      "teaser": "The OpenNG Foundation's first moves, spartan/ui's direction, and how AnalogJS plugs into Storybook.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-16-openng-foundation-spartan-ui-analogjs-in-storybook-63e031f1",
+      "tags": ["Community", "UI", "Tooling"],
+      "topics": [
+        {
+          "title": "OpenNG Foundation",
+          "tag": "Community"
+        },
+        {
+          "title": "spartan/ui",
+          "tag": "UI"
+        },
+        {
+          "title": "AnalogJS in Storybook",
+          "tag": "Tooling"
+        }
+      ]
+    },
+    {
+      "id": "26/15",
+      "title": "Angular 22",
+      "date": "2026-06-23",
+      "teaser": "The Angular 22 release: what shipped, what it replaces, and the migration story.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-15-angular-22-bede85702109",
+      "tags": ["Releases"],
+      "topics": [
+        {
+          "title": "Angular 22: what shipped",
+          "tag": "Releases"
+        }
+      ]
+    },
+    {
+      "id": "26/14",
+      "title": "linkedSignal Write-Back, Error Boundaries",
+      "date": "2026-06-02",
+      "teaser": "linkedSignal grows a write-back story, and the error boundary RFC keeps moving.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-14-linkedsignal-write-back-error-boundaries-34dc4cf20f9b",
+      "tags": ["Signals", "Framework"],
+      "topics": [
+        {
+          "title": "linkedSignal write-back",
+          "tag": "Signals"
+        },
+        {
+          "title": "Error boundaries RFC progress",
+          "tag": "Framework"
+        }
+      ]
+    },
+    {
+      "id": "26/13",
+      "title": "@Service, Native Federation, Angular Feature Lifecycles",
+      "date": "2026-05-05",
+      "teaser": "The @Service proposal, Angular's native federation story, and where feature lifecycles land.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-13-service-native-federation-angular-feature-lifecycles-843fcc",
+      "tags": ["Framework", "Tooling"],
+      "topics": [
+        {
+          "title": "The @Service proposal",
+          "tag": "Framework"
+        },
+        {
+          "title": "Native federation",
+          "tag": "Tooling"
+        },
+        {
+          "title": "Angular feature lifecycles",
+          "tag": "Framework"
+        }
+      ]
+    },
+    {
+      "id": "26/12",
+      "title": "Future of Selectorless, Skills vs. MCP, Zoneless Testing",
+      "date": "2026-04-10",
+      "teaser": "Where selectorless components are heading, why the community is comparing Skills with MCP, and testing zoneless apps.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-12-future-of-selectorless-skills-vs-mcp-zoneless-testing-c27b9",
+      "tags": ["Framework", "AI", "Testing"],
+      "topics": [
+        {
+          "title": "The future of selectorless components",
+          "tag": "Framework"
+        },
+        {
+          "title": "Skills vs. MCP",
+          "tag": "AI"
+        },
+        {
+          "title": "Zoneless testing",
+          "tag": "Testing"
+        }
+      ]
+    },
+    {
+      "id": "26/11",
+      "title": "TypeScript 6, NgRx RFCs delegatedSignal, Resource Extensions",
+      "date": "2026-04-03",
+      "teaser": "TypeScript 6 arrives, NgRx RFCs the delegatedSignal, and router resources get extensions.",
+      "mediumUrl": "https://medium.com/ng-news/ng-news-26-11-typescript-6-ngrx-rfcs-delegatedsignal-resource-extensions",
+      "tags": ["Ecosystem", "Signals", "Router"],
+      "topics": [
+        {
+          "title": "TypeScript 6",
+          "tag": "Ecosystem"
+        },
+        {
+          "title": "NgRx RFCs: delegatedSignal",
+          "tag": "Signals"
+        },
+        {
+          "title": "Resource extensions",
+          "tag": "Router"
+        }
+      ]
+    },
+    {
+      "id": "26/01",
+      "title": "Ng-Poland Takeaways, Dynamic Forms, and NgRx 21",
+      "date": "2026-01-02",
+      "teaser": "Keynotes and Q&As from Ng-Poland, a look at dynamic UI solutions from the community, and the state of Angular after 21.",
+      "file": "26-01.md",
+      "tags": ["Community", "UI", "State Management"],
+      "topics": [
+        {
+          "title": "Ng-Poland: keynotes, Q&As, and the state of Angular",
+          "tag": "Community"
+        },
+        {
+          "title": "Dynamic UI solutions from the community",
+          "tag": "UI"
+        },
+        {
+          "title": "Security: watch out for malicious libraries",
+          "tag": "Security"
+        },
+        {
+          "title": "NgRx 21",
+          "tag": "State Management"
+        }
+      ]
+    }
+  ]
+}

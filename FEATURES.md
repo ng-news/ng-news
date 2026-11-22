@@ -33,7 +33,7 @@ The issue is the unit of the site. Topics inside an issue are the unit of scanni
 
 | # | Feature | Notes |
 |---|---------|-------|
-| 11 | **Search** | Full-text across issues/topics (e.g. FlexSearch client-side for <100 issues, then a real index). |
+| 11 | **Search** ✅ | Full-text across issues/topics (e.g. FlexSearch client-side for <100 issues, then a real index). **Done (v1)**: MiniSearch client-side over a build-time `search-index.json`; no backend. |
 | 12 | **Topic pages** | `/topics/signals` — all issues touching a tag, chronological. Turns tags into a second navigation axis. |
 | 13 | **YouTube integration** | Channel embed on home/about; optional per-issue "watch this week" video. The channel already exists (`@ng-news`). |
 | 14 | **Continue reading** | Remember last read position per issue; resume on return. |
@@ -47,7 +47,7 @@ The issue is the unit of the site. Topics inside an issue are the unit of scanni
 | # | Feature | Notes |
 |---|---------|-------|
 | 19 | **Angular release radar** | Auto-track GitHub releases of the Angular org + key libs (NgRx, PrimeNG, spartan/ui, AnalogJS…); a "new this week in the ecosystem" panel. Directly extends the curation with machine help. |
-| 20 | **Community picks** | Weekly links to standout community posts (blog posts, PRs, talks) with a submission form. |
+| 20 | **Community picks** ✅ | Weekly links to standout community posts (blog posts, PRs, talks) with a submission form. **Done (v1)**: `/submit` + Turso-backed `submissions` table + token-gated `/admin` moderation + `/community` picks page. |
 | 21 | **Angular version changelog viewer** | Structured per-version changelog (22.1, 22.2, …) derived from issue content — evergreen SEO content. |
 | 22 | **PDF/print per issue** | One-click printable/PDF version. |
 | 23 | **Issue API** | Read-only JSON API of the issue store (`/api/issues`) — feeds the site, the feed, and anyone building on the data. |

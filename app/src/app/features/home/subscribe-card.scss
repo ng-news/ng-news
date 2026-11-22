@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  grid-column: span 2;
+}
+
+.sub {
+  height: 100%;
+  background: var(--grad);
+  border-radius: var(--radius);
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  h4 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 12.5px;
+    opacity: 0.85;
+  }
+
+  .btn {
+    margin-left: auto;
+    background: #fff;
+    color: var(--accent);
+    border-radius: 9px;
+    padding: 9px 18px;
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 960px) {
+  :host {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 560px) {
+  :host {
+    grid-column: span 1;
+  }
+}
