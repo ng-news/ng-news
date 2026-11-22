@@ -4,3 +4,17 @@
   grid-template-columns: repeat(6, 1fr);
   grid-auto-rows: minmax(110px, auto);
 }
+
+/* Card spans in each feature's :host style expect these column counts: */
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+}

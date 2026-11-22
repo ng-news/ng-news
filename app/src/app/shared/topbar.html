@@ -18,7 +18,6 @@
       type="search"
       placeholder="Search issues, topics…"
       aria-label="Search issues and topics"
-      [disabled]="search.loading()"
       (input)="onInput($any($event.target).value)"
       (keydown)="onKeydown($event)"
       (blur)="onBlur()"
@@ -26,9 +25,9 @@
     />
     @if (open()) {
       <ul class="results">
-        @for (hit of hits(); track hit.doc.id) {
+        @for (hit of hits(); track hit.doc.id; let i = $index) {
           @if (hit.doc) {
-            <li (mousedown)="onResultDown()" (click)="pick(hit)">
+            <li [class.active]="i === active()" (mousedown)="onResultDown()" (click)="pick(hit)">
               <span class="type">{{ hit.doc.type === 'issue' ? 'issue' : 'topic' }}</span>
               <span class="t">{{ hit.doc.title }}</span>
             </li>

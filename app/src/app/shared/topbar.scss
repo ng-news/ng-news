@@ -116,7 +116,8 @@ nav {
       font-size: 13.5px;
       color: var(--text-dim);
 
-      &:hover {
+      &:hover,
+      &.active {
         background: var(--surface-2);
         color: var(--text);
       }
@@ -162,8 +163,22 @@ nav {
 }
 
 @media (max-width: 960px) {
+  .inner {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding: 10px 16px;
+  }
+
+  /* Nav moves to its own row below logo/search/CTA instead of disappearing. */
   nav {
-    display: none;
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .logo {
+    font-size: 17px;
   }
 
   .logo .est {
@@ -171,6 +186,13 @@ nav {
   }
 
   .search {
-    width: 170px;
+    width: auto;
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+
+  .cta {
+    padding: 7px 12px;
+    white-space: nowrap;
   }
 }

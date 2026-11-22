@@ -24,6 +24,8 @@ export class Topbar implements OnDestroy {
 
   protected readonly hits = signal<SearchHit[]>([]);
   protected readonly open = signal(false);
+  /** Index of the result highlighted for keyboard selection (-1 = none). */
+  protected readonly active = signal(-1);
 
   private debounce: ReturnType<typeof setTimeout> | null = null;
   private closeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -53,20 +55,31 @@ export class Topbar implements OnDestroy {
     this.debounce = setTimeout(async () => {
       try {
         this.hits.set(await this.search.search(q, 8));
+        this.active.set(-1);
         this.open.set(true);
       } catch {
         this.hits.set([]);
         this.open.set(false);
+        this.active.set(-1);
       }
     }, 150);
   }
 
   protected onKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      this.open.set(false);
-    } else if (e.key === 'Enter' && this.hits().length > 0) {
+    const n = this.hits().length;
+    if (e.key === 'ArrowDown' && n > 0) {
       e.preventDefault();
-      this.pick(this.hits()[0]);
+      this.active.set(Math.min(this.active() + 1, n - 1));
+    } else if (e.key === 'ArrowUp' && n > 0) {
+      e.preventDefault();
+      this.active.set(Math.max(this.active() - 1, 0));
+    } else if (e.key === 'Enter' && n > 0) {
+      e.preventDefault();
+      const hit = this.hits()[Math.max(this.active(), 0)];
+      this.pick(hit);
+    } else if (e.key === 'Escape') {
+      this.open.set(false);
+      this.active.set(-1);
     }
   }
 
@@ -74,12 +87,16 @@ export class Topbar implements OnDestroy {
     this.clearTimers();
     this.open.set(false);
     this.hits.set([]);
+    this.active.set(-1);
     this.router.navigateByUrl(hit.doc.url);
   }
 
   protected onBlur() {
     // Deferred so the result's mousedown (which clears it) can win.
-    this.closeTimer = setTimeout(() => this.open.set(false), 150);
+    this.closeTimer = setTimeout(() => {
+      this.open.set(false);
+      this.active.set(-1);
+    }, 150);
   }
 
   protected onResultDown() {
